@@ -9,17 +9,18 @@ use Validator;
 class HelloController extends Controller
 {
     public function index(Request $request){
-        $data = [
-            ['name' => '山田たろう', 'mail' => 'taro@yamada'],
-            ['name' => '田中はなこ', 'mail' => 'hanako@flower'],
-            ['name' => '鈴木さちこ', 'mail' => 'sachico@happy']
-        ];
+        $validator = Validator::make($request->query(), [
+            'id' => 'required',
+            'pass' => 'required',
+        ]);
 
-//        return view('index', ['data' => $data]);
-//        return view('index', ['message' => "Hello!"]);
-//        return view('index', ['data' => $request->data]);
-//        return view('index');
-        return view('index', ['msg' => 'フォームを入力:']);
+        if($validator->fails()){
+            $msg = 'クエリに問題があります。';
+        }else{
+            $msg = 'ID/PASSを受け付けました。';
+        }
+
+        return view('index', ['msg' => $msg, ]);
     }
 
     public function post(HelloRequest $request){
